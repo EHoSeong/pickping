@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site.name }} — 카테고리별 가격 비교 추천{% endblock %}
+{% block description %}{{ site.description }}{% endblock %}
+{% block canonical %}index.html{% endblock %}
+
+{% block content %}
+<h1>{{ site.name }}</h1>
+<p class="lead">{{ site.description }}</p>
+
+<h2>추천 모음 ({{ pages|length }})</h2>
+<ul class="index-list">
+  {% for p in pages %}
+  <li>
+    <a href="{{ p.slug }}.html">
+      <span>{{ p.title }} TOP {{ p.stats.count }}</span>
+      <span class="cat">{{ p.category }} · {{ p.stats.min|won }}~{{ p.stats.max|won }}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

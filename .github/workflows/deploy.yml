@@ -1,0 +1,78 @@
+name: Build and Deploy
+
+on:
+  # 매일 06:00 KST (UTC 21:00) 자동 재빌드 → 가격·순위 갱신
+  schedule:
+    - cron: "0 21 * * *"
+  # 수동 실행 버튼
+  workflow_dispatch:
+  # main 브랜치 푸시 시에도 배포
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 동시 배포 1건으로 제한
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: Secrets 로 config.json 생성
+        env:
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          SITE_NAME: ${{ secrets.SITE_NAME }}
+          SITE_BASE_URL: ${{ secrets.SITE_BASE_URL }}
+          COUPANG_PARTNERS_ID: ${{ secrets.COUPANG_PARTNERS_ID }}
+        run: |
+          python - <<'PY'
+          import json, os
+          cfg = {
+              "site": {
+                  "name": os.environ.get("SITE_NAME") or "오늘의 추천픽",
+                  "base_url": os.environ.get("SITE_BASE_URL") or "",
+                  "description": "가격·브랜드를 한눈에 비교해 카테고리별 추천을 정리합니다.",
+                  "coupang_partners_id": os.environ.get("COUPANG_PARTNERS_ID") or "",
+              },
+              "naver": {
+                  "client_id": os.environ["NAVER_CLIENT_ID"],
+                  "client_secret": os.environ["NAVER_CLIENT_SECRET"],
+              },
+              "top_n": 10,
+              "fetch_count": 40,
+          }
+          with open("config.json", "w", encoding="utf-8") as f:
+              json.dump(cfg, f, ensure_ascii=False, indent=2)
+          print("config.json 생성 완료")
+          PY
+
+      - name: 정적 사이트 빌드
+        run: python build.py
+
+      - name: Pages 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: GitHub Pages 배포
+        id: deploy
+        uses: actions/deploy-pages@v4

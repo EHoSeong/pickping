@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 실제 키만 비밀 유지 (GitHub Secrets 로 주입)
+config.json
+
+# seeds.json / keywords.json 은 커밋한다
+#  - GitHub Actions 가 빌드 시 keywords.json 을 읽으므로 레포에 있어야 함
+#  - 키워드 확장은 로컬에서 find_keywords.py 로 생성 후 커밋
+
+# 생성된 정적 사이트 (Actions 가 재생성)
+dist/

@@ -1,0 +1,14 @@
+{
+  "site": {
+    "name": "오늘의 추천픽",
+    "base_url": "https://example.com",
+    "description": "가격·브랜드를 한눈에 비교해 카테고리별 추천 상품을 정리합니다.",
+    "coupang_partners_id": "여기에_쿠팡파트너스_ID (선택, 없으면 네이버 링크 사용)"
+  },
+  "naver": {
+    "client_id": "네이버_개발자센터_Client_ID",
+    "client_secret": "네이버_개발자센터_Client_Secret"
+  },
+  "top_n": 10,
+  "fetch_count": 40
+}

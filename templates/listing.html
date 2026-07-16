@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} TOP {{ page.stats.count }} | {{ site.name }}{% endblock %}
+{% block description %}{{ page.keyword }} 가격 비교 — 최저 {{ page.stats.min|won }}부터 {{ page.stats.max|won }}까지 {{ page.stats.count }}개 상품을 가격·브랜드 기준으로 비교한 추천 순위.{% endblock %}
+{% block canonical %}{{ page.slug }}.html{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "{{ page.title }} TOP {{ page.stats.count }}",
+  "itemListElement": [
+    {% for p in page.products %}
+    {
+      "@type": "ListItem",
+      "position": {{ p.rank }},
+      "item": {
+        "@type": "Product",
+        "name": "{{ p.title }}",
+        "brand": "{{ p.brand }}",
+        "offers": { "@type": "Offer", "price": "{{ p.price }}", "priceCurrency": "KRW" }
+      }
+    }{{ "," if not loop.last }}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>{{ page.title }} TOP {{ page.stats.count }}</h1>
+<p class="lead">
+  {{ page.keyword }} {{ page.stats.count }}개를 가격·브랜드 기준으로 비교했습니다.
+  가격은 최저 <strong class="tnum">{{ page.stats.min|won }}</strong>부터
+  최고 <strong class="tnum">{{ page.stats.max|won }}</strong>까지이며,
+  중간값은 약 <strong class="tnum">{{ page.stats.median|won }}</strong>입니다.
+</p>
+<div class="meta-badges">
+  {% if page.category %}<span class="badge">{{ page.category }}</span>{% endif %}
+  <span class="badge">브랜드 {{ page.stats.brands|length }}종</span>
+  <span class="badge">판매처 {{ page.stats.malls|length }}곳</span>
+</div>
+
+{% if page.picks %}
+<h2>가격대별 추천</h2>
+<div class="picks">
+  <div class="pick">
+    <div class="k">💰 가성비 픽</div>
+    <div class="nm">{{ page.picks.budget.title }}</div>
+    <div class="pr tnum">{{ page.picks.budget.price|won }}</div>
+  </div>
+  <div class="pick">
+    <div class="k">⚖️ 밸런스 픽</div>
+    <div class="nm">{{ page.picks.balanced.title }}</div>
+    <div class="pr tnum">{{ page.picks.balanced.price|won }}</div>
+  </div>
+  <div class="pick">
+    <div class="k">✨ 프리미엄 픽</div>
+    <div class="nm">{{ page.picks.premium.title }}</div>
+    <div class="pr tnum">{{ page.picks.premium.price|won }}</div>
+  </div>
+</div>
+{% endif %}
+
+<h2>전체 비교표</h2>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>순위</th><th>상품</th><th>브랜드</th><th>가격</th><th>판매처</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for p in page.products %}
+      <tr>
+        <td><span class="rank">{{ p.rank }}</span></td>
+        <td>{{ p.title }}</td>
+        <td>{{ p.brand or "-" }}</td>
+        <td class="price tnum">{{ p.price|won }}</td>
+        <td>{{ p.mall }}</td>
+        <td><a class="btn" href="{{ p.affiliate }}" rel="nofollow sponsored" target="_blank">최저가 보기</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2>어떻게 골랐나요 (선정 기준)</h2>
+<ul class="criteria">
+  <li>네이버 쇼핑 검색 데이터에서 {{ page.keyword }} 상품을 수집해 <strong>가격 순</strong>으로 정렬했습니다.</li>
+  <li>동일 상품의 <strong>최저가 판매처</strong>를 기준으로 비교했습니다.</li>
+  <li>가격대별로 부담 없는 <strong>가성비</strong>, 무난한 <strong>밸런스</strong>, 상위 <strong>프리미엄</strong> 픽을 나눴습니다.</li>
+  <li>가격·재고는 변동되므로 구매 전 판매처에서 최종 확인을 권장합니다.</li>
+</ul>
+
+<h2>자주 묻는 질문</h2>
+<div class="faq">
+  {% for f in page.faqs %}
+  <details>
+    <summary>{{ f.q }}</summary>
+    <p>{{ f.a }}</p>
+  </details>
+  {% endfor %}
+</div>
+
+<div class="disclosure">
+  ⓘ 이 페이지에는 제휴 링크가 포함될 수 있으며, 구매 시 판매처로부터 일정 수수료를 제공받을 수 있습니다.
+  이는 구매자의 추가 부담과 무관합니다.
+</div>
+{% endblock %}
