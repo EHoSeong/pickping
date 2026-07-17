@@ -20,6 +20,9 @@ def _env():
 
 def generate_site(pages, site):
     """페이지 데이터 목록으로 전체 정적 사이트를 생성한다."""
+    site = dict(site)
+    site["base_url"] = (site.get("base_url") or "").strip().rstrip("/")
+
     os.makedirs(DIST_DIR, exist_ok=True)
     env = _env()
 

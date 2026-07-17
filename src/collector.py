@@ -7,21 +7,36 @@ from statistics import median
 
 
 def _affiliate_link(product, coupang_id):
-    """제휴 링크 생성. 쿠팡파트너스 ID가 있으면 쿠팡 검색 딥링크, 없으면 네이버 원본."""
-    if coupang_id and coupang_id.startswith("여기에") is False and coupang_id:
-        # 실제 운영 시 쿠팡파트너스 딥링크 API로 교체. MVP는 검색 링크 형태.
+    """쿠팡 검색 링크 생성(트래킹 코드는 없음). 쿠팡파트너스 ID가 없으면 네이버 원본."""
+    if coupang_id and not coupang_id.startswith("여기에"):
         from urllib.parse import quote
         return f"https://www.coupang.com/np/search?q={quote(product['title'])}"
     return product["link"]
 
 
-def build_page_data(entry, products, coupang_id="", top_n=10):
-    """수집된 상품으로 페이지 렌더링용 데이터 구조를 만든다."""
+def build_page_data(entry, products, coupang_id="", top_n=10, coupang_creds=None):
+    """수집된 상품으로 페이지 렌더링용 데이터 구조를 만든다.
+
+    coupang_creds: {"access_key", "secret_key", "sub_id"(선택)} — 있으면 쿠팡 검색
+    링크를 Open API로 실제 트래킹되는 딥링크로 변환한다. 없으면 트래킹 없는 검색 링크.
+    """
     # 가격 오름차순 정렬 후 상위 N개
     ranked = sorted(products, key=lambda p: p["price"])[:top_n]
     for i, p in enumerate(ranked, 1):
         p["rank"] = i
         p["affiliate"] = _affiliate_link(p, coupang_id)
+
+    if coupang_creds and coupang_creds.get("access_key") and coupang_creds.get("secret_key"):
+        from . import coupang_client
+
+        tracked = coupang_client.create_deeplinks(
+            [p["affiliate"] for p in ranked],
+            coupang_creds["access_key"],
+            coupang_creds["secret_key"],
+            sub_id=coupang_creds.get("sub_id"),
+        )
+        for p, link in zip(ranked, tracked):
+            p["affiliate"] = link
 
     prices = [p["price"] for p in ranked]
     brands = sorted({p["brand"] for p in ranked if p["brand"]})

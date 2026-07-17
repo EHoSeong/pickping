@@ -43,19 +43,25 @@ jobs:
           SITE_NAME: ${{ secrets.SITE_NAME }}
           SITE_BASE_URL: ${{ secrets.SITE_BASE_URL }}
           COUPANG_PARTNERS_ID: ${{ secrets.COUPANG_PARTNERS_ID }}
+          COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
+          COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
         run: |
           python - <<'PY'
           import json, os
           cfg = {
               "site": {
-                  "name": os.environ.get("SITE_NAME") or "오늘의 추천픽",
-                  "base_url": os.environ.get("SITE_BASE_URL") or "",
+                  "name": (os.environ.get("SITE_NAME") or "오늘의 추천픽").strip(),
+                  "base_url": (os.environ.get("SITE_BASE_URL") or "").strip(),
                   "description": "가격·브랜드를 한눈에 비교해 카테고리별 추천을 정리합니다.",
-                  "coupang_partners_id": os.environ.get("COUPANG_PARTNERS_ID") or "",
+                  "coupang_partners_id": (os.environ.get("COUPANG_PARTNERS_ID") or "").strip(),
               },
               "naver": {
-                  "client_id": os.environ["NAVER_CLIENT_ID"],
-                  "client_secret": os.environ["NAVER_CLIENT_SECRET"],
+                  "client_id": (os.environ["NAVER_CLIENT_ID"]).strip(),
+                  "client_secret": (os.environ["NAVER_CLIENT_SECRET"]).strip(),
+              },
+              "coupang": {
+                  "access_key": (os.environ.get("COUPANG_ACCESS_KEY") or "").strip(),
+                  "secret_key": (os.environ.get("COUPANG_SECRET_KEY") or "").strip(),
               },
               "top_n": 10,
               "fetch_count": 40,

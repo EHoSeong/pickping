@@ -9,6 +9,11 @@
     "client_id": "네이버_개발자센터_Client_ID",
     "client_secret": "네이버_개발자센터_Client_Secret"
   },
+  "coupang": {
+    "access_key": "쿠팡파트너스_OpenAPI_ACCESS_KEY (partners.coupang.com > Open API 메뉴에서 발급, 선택)",
+    "secret_key": "쿠팡파트너스_OpenAPI_SECRET_KEY",
+    "sub_id": ""
+  },
   "top_n": 10,
   "fetch_count": 40
 }

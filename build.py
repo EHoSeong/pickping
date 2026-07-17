@@ -67,6 +67,7 @@ def main():
         ]
         top_n, fetch = 10, 40
         fetch_products = _demo_products
+        coupang_creds = None
         print("=== 데모 모드 (샘플 데이터, 실제 API 미사용) ===")
     else:
         config = _load("config.json")
@@ -74,6 +75,8 @@ def main():
         site = config["site"]
         top_n = config.get("top_n", 10)
         fetch = config.get("fetch_count", 40)
+
+        coupang_creds = config.get("coupang")
 
         def fetch_products(keyword):
             return naver_client.search_products(
@@ -94,7 +97,7 @@ def main():
             print(f"[건너뜀] {entry['keyword']} — 상품 없음")
             continue
         page = collector.build_page_data(
-            entry, products, site.get("coupang_partners_id", ""), top_n
+            entry, products, site.get("coupang_partners_id", ""), top_n, coupang_creds
         )
         pages.append(page)
         print(f"[수집] {entry['keyword']}: {page['stats']['count']}개 "

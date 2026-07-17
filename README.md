@@ -43,6 +43,12 @@ python build.py     # dist/ 에 정적 사이트 생성
 
 ### 5. 수익화 세팅
 - **쿠팡파트너스** 가입(사이트 있으면 승인 쉬움) → `coupang_partners_id` 입력
+  - 이것만으로는 링크에 트래킹 코드가 안 붙어 수익이 안 잡힘. 실제 정산을 받으려면
+    파트너스 사이트 우측 상단 **Open API** 메뉴에서 `ACCESS KEY`/`SECRET KEY`를 추가로
+    발급받아 `config.json`의 `coupang.access_key`/`coupang.secret_key`에 입력한다.
+    (GitHub Actions 자동 빌드는 `COUPANG_ACCESS_KEY`/`COUPANG_SECRET_KEY` Secrets로 주입)
+  - 키를 넣으면 빌드 시 쿠팡 검색 링크가 딥링크 API(`link.coupang.com/a/...`)로 자동
+    변환되어 트래킹된다. 키가 없으면 트래킹 없는 검색 링크로 폴백(빌드는 실패하지 않음).
 - **구글 애드센스** 신청 → 승인 후 광고 코드 삽입
 - **구글 서치콘솔**에 사이트 등록 + `sitemap.xml` 제출 → 색인 유도
 
@@ -68,6 +74,7 @@ pickping/
 ├─ keywords.example.json 생성할 키워드 목록 = 페이지들
 ├─ src/
 │  ├─ naver_client.py    네이버 쇼핑 검색 API
+│  ├─ coupang_client.py  쿠팡파트너스 딥링크(트래킹 링크) 변환
 │  ├─ collector.py       비교 가치 가공(통계·픽·FAQ·슬러그)
 │  └─ generator.py       Jinja2 렌더 + sitemap
 ├─ templates/            base / listing / index
