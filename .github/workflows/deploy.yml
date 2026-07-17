@@ -45,6 +45,7 @@ jobs:
           COUPANG_PARTNERS_ID: ${{ secrets.COUPANG_PARTNERS_ID }}
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
+          COUPANG_FALLBACK_LINK: ${{ secrets.COUPANG_FALLBACK_LINK }}
         run: |
           python - <<'PY'
           import json, os
@@ -62,6 +63,7 @@ jobs:
               "coupang": {
                   "access_key": (os.environ.get("COUPANG_ACCESS_KEY") or "").strip(),
                   "secret_key": (os.environ.get("COUPANG_SECRET_KEY") or "").strip(),
+                  "fallback_link": (os.environ.get("COUPANG_FALLBACK_LINK") or "").strip(),
               },
               "top_n": 10,
               "fetch_count": 40,

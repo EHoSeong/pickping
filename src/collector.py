@@ -17,16 +17,21 @@ def _affiliate_link(product, coupang_id):
 def build_page_data(entry, products, coupang_id="", top_n=10, coupang_creds=None):
     """수집된 상품으로 페이지 렌더링용 데이터 구조를 만든다.
 
-    coupang_creds: {"access_key", "secret_key", "sub_id"(선택)} — 있으면 쿠팡 검색
-    링크를 Open API로 실제 트래킹되는 딥링크로 변환한다. 없으면 트래킹 없는 검색 링크.
+    coupang_creds: {"access_key", "secret_key", "sub_id"(선택), "fallback_link"(선택)}
+    - access_key/secret_key 있으면 Open API로 상품별 정밀 딥링크 생성(최우선)
+    - 없고 fallback_link 있으면, 최종승인 전 파트너스 대시보드에서 수동으로 만든
+      트래킹 링크 하나를 모든 상품에 공통으로 사용(정밀하진 않지만 클릭이 실적으로 잡힘)
+    - 둘 다 없으면 트래킹 안 되는 쿠팡 검색 링크(혹은 네이버 원본)
     """
+    coupang_creds = coupang_creds or {}
+
     # 가격 오름차순 정렬 후 상위 N개
     ranked = sorted(products, key=lambda p: p["price"])[:top_n]
     for i, p in enumerate(ranked, 1):
         p["rank"] = i
         p["affiliate"] = _affiliate_link(p, coupang_id)
 
-    if coupang_creds and coupang_creds.get("access_key") and coupang_creds.get("secret_key"):
+    if coupang_creds.get("access_key") and coupang_creds.get("secret_key"):
         from . import coupang_client
 
         tracked = coupang_client.create_deeplinks(
@@ -37,6 +42,9 @@ def build_page_data(entry, products, coupang_id="", top_n=10, coupang_creds=None
         )
         for p, link in zip(ranked, tracked):
             p["affiliate"] = link
+    elif coupang_creds.get("fallback_link"):
+        for p in ranked:
+            p["affiliate"] = coupang_creds["fallback_link"]
 
     prices = [p["price"] for p in ranked]
     brands = sorted({p["brand"] for p in ranked if p["brand"]})

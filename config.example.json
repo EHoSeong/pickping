@@ -12,7 +12,8 @@
   "coupang": {
     "access_key": "쿠팡파트너스_OpenAPI_ACCESS_KEY (partners.coupang.com > Open API 메뉴에서 발급, 선택)",
     "secret_key": "쿠팡파트너스_OpenAPI_SECRET_KEY",
-    "sub_id": ""
+    "sub_id": "",
+    "fallback_link": "https://link.coupang.com/a/xxxxxxx (Open API 승인 전, 파트너스 대시보드에서 수동 생성한 트래킹 링크 — 모든 상품에 공통 사용)"
   },
   "top_n": 10,
   "fetch_count": 40

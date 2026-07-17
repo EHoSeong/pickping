@@ -2,6 +2,55 @@
   { "seed": "무선 이어폰", "category": "디지털" },
   { "seed": "기계식 키보드", "category": "디지털" },
   { "seed": "무선 마우스", "category": "디지털" },
+  { "seed": "보조배터리", "category": "디지털" },
+  { "seed": "블루투스 스피커", "category": "디지털" },
+  { "seed": "스마트워치", "category": "디지털" },
+  { "seed": "웹캠", "category": "디지털" },
+  { "seed": "모니터", "category": "디지털" },
+
   { "seed": "캠핑 의자", "category": "캠핑" },
-  { "seed": "캠핑 테이블", "category": "캠핑" }
+  { "seed": "캠핑 테이블", "category": "캠핑" },
+  { "seed": "캠핑 랜턴", "category": "캠핑" },
+  { "seed": "텐트", "category": "캠핑" },
+  { "seed": "차박 매트", "category": "캠핑" },
+  { "seed": "아이스박스", "category": "캠핑" },
+
+  { "seed": "에어프라이어", "category": "생활가전" },
+  { "seed": "로봇청소기", "category": "생활가전" },
+  { "seed": "공기청정기", "category": "생활가전" },
+  { "seed": "가습기", "category": "생활가전" },
+  { "seed": "제습기", "category": "생활가전" },
+  { "seed": "전기포트", "category": "생활가전" },
+
+  { "seed": "프라이팬", "category": "주방용품" },
+  { "seed": "밥솥", "category": "주방용품" },
+  { "seed": "커피머신", "category": "주방용품" },
+  { "seed": "텀블러", "category": "주방용품" },
+  { "seed": "식기건조대", "category": "주방용품" },
+
+  { "seed": "드라이기", "category": "뷰티" },
+  { "seed": "고데기", "category": "뷰티" },
+  { "seed": "마스크팩", "category": "뷰티" },
+  { "seed": "클렌징폼", "category": "뷰티" },
+
+  { "seed": "유모차", "category": "유아동" },
+  { "seed": "카시트", "category": "유아동" },
+  { "seed": "아기띠", "category": "유아동" },
+
+  { "seed": "강아지 사료", "category": "반려동물" },
+  { "seed": "고양이 모래", "category": "반려동물" },
+  { "seed": "강아지 장난감", "category": "반려동물" },
+
+  { "seed": "요가매트", "category": "스포츠레저" },
+  { "seed": "런닝화", "category": "스포츠레저" },
+  { "seed": "자전거", "category": "스포츠레저" },
+  { "seed": "등산화", "category": "스포츠레저" },
+
+  { "seed": "차량용 청소기", "category": "자동차용품" },
+  { "seed": "블랙박스", "category": "자동차용품" },
+  { "seed": "자동차 방향제", "category": "자동차용품" },
+
+  { "seed": "안마의자", "category": "건강" },
+  { "seed": "마사지건", "category": "건강" },
+  { "seed": "혈압계", "category": "건강" }
 ]
